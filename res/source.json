@@ -5,7 +5,8 @@
     "version": 1,
     "url": "http://localhost:4567",
     "contentRating": 1,
-    "languages": ["mul"]
+    "languages": ["mul"],
+    "minAppVersion": "0.7.0"
   },
   "listings": [
     { "id": "library", "name": "Library", "kind": 0 },

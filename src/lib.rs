@@ -15,7 +15,7 @@ mod helpers;
 
 use api::graphql;
 
-const DEFAULT_SERVER_URL: &str = "http://localhost:4567";
+const DEFAULT_SERVER_URL: &str = "http://192.168.50.62:4567";
 const PAGE_SIZE: i32 = 20;
 
 // ── Sort field constants (GraphQL enum values) ────────────────────────────────
