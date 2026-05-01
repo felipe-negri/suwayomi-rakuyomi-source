@@ -41,16 +41,18 @@ jobs:
 
       - name: Bump version
         run: |
-          VERSION=${{ github.run_number }}
+          PATCH=${{ github.run_number }}
+          VERSION="1.0.${PATCH}"
           echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "PATCH=$PATCH" >> $GITHUB_ENV
 
-          # Update res/source.json
-          jq ".info.version = $VERSION" res/source.json > /tmp/source.json && mv /tmp/source.json res/source.json
+          # Update res/source.json (version must be integer per Aidoku spec)
+          jq ".info.version = $PATCH" res/source.json > /tmp/source.json && mv /tmp/source.json res/source.json
 
           # Update index.min.json
-          jq ".[0].version = $VERSION" index.min.json > /tmp/index.json && mv /tmp/index.json index.min.json
+          jq ".[0].version = $PATCH" index.min.json > /tmp/index.json && mv /tmp/index.json index.min.json
 
-          echo "Bumped to version $VERSION"
+          echo "Bumped to version $VERSION (source version: $PATCH)"
 
       - name: Build and package
         run: aidoku package .
@@ -80,7 +82,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ env.VERSION }}
-          name: v${{ env.VERSION }}
+          name: Release v${{ env.VERSION }}
           files: package.aix
           generate_release_notes: true
 

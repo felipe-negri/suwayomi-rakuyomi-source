@@ -8,8 +8,7 @@
         "key": "serverUrl",
         "title": "Suwayomi Server URL",
         "placeholder": "http://192.168.1.1:4567",
-        "default": "",
-        "refreshes": ["content", "listings"]
+        "default": ""
       }
     ]
   },
