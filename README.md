@@ -61,10 +61,6 @@ After installing, tap ⚙️ next to the Suwayomi source and fill in:
 
 > ⚠️ The **Server URL is required**. The source won't work until it's configured.
 
-### Manual install (.aix file)
-
-Alternatively, download `package.aix` from the [latest release](../../releases/latest) and install it manually via **Manage Sources → ➕ → local file**.
-
 ## Building from Source
 
 ```bash
