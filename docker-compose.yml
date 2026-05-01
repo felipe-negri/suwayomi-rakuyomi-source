@@ -1,0 +1,23 @@
+services:
+  # Suwayomi manga server
+  suwayomi:
+    image: ghcr.io/suwayomi/suwayomi-server:stable
+    container_name: suwayomi-server
+    environment:
+      - TZ=America/Sao_Paulo
+    volumes:
+      - suwayomi_data:/home/suwayomi/.local/share/Tachidesk
+    ports:
+      - "4567:4567"
+    restart: unless-stopped
+
+  # Suwayomi Aidoku source server (serves package.aix)
+  source-server:
+    build: .
+    container_name: suwayomi-source
+    ports:
+      - "4667:80"
+    restart: unless-stopped
+
+volumes:
+  suwayomi_data:

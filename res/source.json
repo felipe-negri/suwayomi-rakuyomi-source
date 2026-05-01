@@ -1,0 +1,17 @@
+{
+  "info": {
+    "id": "mul.suwayomi",
+    "name": "Suwayomi",
+    "version": 1,
+    "url": "http://localhost:4567",
+    "contentRating": 1,
+    "languages": ["mul"]
+  },
+  "listings": [
+    { "id": "library", "name": "Library", "kind": 0 },
+    { "id": "recent",  "name": "Recently Updated", "kind": 1 }
+  ],
+  "config": {
+    "supportsTagSearch": true
+  }
+}

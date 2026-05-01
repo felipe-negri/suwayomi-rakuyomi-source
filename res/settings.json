@@ -1,0 +1,36 @@
+[
+  {
+    "type": "group",
+    "title": "Server",
+    "items": [
+      {
+        "type": "text",
+        "key": "serverUrl",
+        "title": "Suwayomi Server URL",
+        "placeholder": "http://192.168.1.1:4567",
+        "default": "http://localhost:4567",
+        "refreshes": ["content", "listings"]
+      }
+    ]
+  },
+  {
+    "type": "group",
+    "title": "Authentication (optional)",
+    "footer": "Leave blank if your Suwayomi server does not require authentication.",
+    "items": [
+      {
+        "type": "text",
+        "key": "username",
+        "title": "Username",
+        "placeholder": "Leave blank if not required"
+      },
+      {
+        "type": "text",
+        "key": "password",
+        "title": "Password",
+        "placeholder": "Leave blank if not required",
+        "secure": true
+      }
+    ]
+  }
+]

@@ -1,0 +1,14 @@
+/home/hiroshi/projetos/suwayomi-aidoku-source/target/wasm32-unknown-unknown/debug/deps/serde-837162918a494afe.d: /home/hiroshi/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /home/hiroshi/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /home/hiroshi/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /home/hiroshi/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /home/hiroshi/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /home/hiroshi/projetos/suwayomi-aidoku-source/target/wasm32-unknown-unknown/debug/build/serde-48967fc1d78a81d5/out/private.rs
+
+/home/hiroshi/projetos/suwayomi-aidoku-source/target/wasm32-unknown-unknown/debug/deps/libserde-837162918a494afe.rlib: /home/hiroshi/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /home/hiroshi/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /home/hiroshi/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /home/hiroshi/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /home/hiroshi/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /home/hiroshi/projetos/suwayomi-aidoku-source/target/wasm32-unknown-unknown/debug/build/serde-48967fc1d78a81d5/out/private.rs
+
+/home/hiroshi/projetos/suwayomi-aidoku-source/target/wasm32-unknown-unknown/debug/deps/libserde-837162918a494afe.rmeta: /home/hiroshi/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /home/hiroshi/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /home/hiroshi/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /home/hiroshi/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /home/hiroshi/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /home/hiroshi/projetos/suwayomi-aidoku-source/target/wasm32-unknown-unknown/debug/build/serde-48967fc1d78a81d5/out/private.rs
+
+/home/hiroshi/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs:
+/home/hiroshi/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs:
+/home/hiroshi/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs:
+/home/hiroshi/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs:
+/home/hiroshi/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs:
+/home/hiroshi/projetos/suwayomi-aidoku-source/target/wasm32-unknown-unknown/debug/build/serde-48967fc1d78a81d5/out/private.rs:
+
+# env-dep:OUT_DIR=/home/hiroshi/projetos/suwayomi-aidoku-source/target/wasm32-unknown-unknown/debug/build/serde-48967fc1d78a81d5/out

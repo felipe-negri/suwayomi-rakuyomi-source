@@ -1,0 +1,17 @@
+[
+  {
+    "type": "sort",
+    "id": "sort",
+    "title": "Sort By",
+    "canAscend": true,
+    "options": ["Title", "Last Updated", "Date Added"],
+    "default": { "index": 1, "ascending": false }
+  },
+  {
+    "type": "select",
+    "id": "status",
+    "title": "Status",
+    "options": ["Any", "Ongoing", "Completed", "Hiatus", "Cancelled"],
+    "default": "Any"
+  }
+]
