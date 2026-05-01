@@ -31,7 +31,6 @@ On your e-reader, open the `rakuyomi/settings.json` file and add this source lis
 {
   "$schema": "https://github.com/tachibana-shin/rakuyomi/releases/latest/download/settings.schema.json",
   "source_lists": [
-    "https://aidoku-community.github.io/sources/index.min.json",
     "https://felipe-negri.github.io/suwayomi-rakuyomi-source/index.min.json"
   ],
   "languages": ["en"]
