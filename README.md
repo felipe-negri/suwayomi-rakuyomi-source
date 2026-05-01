@@ -1,6 +1,6 @@
-# suwayomi-aidoku-source
+# suwayomi-rakuyomi-source
 
-An [Aidoku](https://github.com/Aidoku/Aidoku) source that bridges [Rakuyomi](https://github.com/tachibana-shin/rakuyomi) (the KOReader manga plugin) with your local [Suwayomi-Server](https://github.com/Suwayomi/Suwayomi-Server).
+An [Aidoku](https://github.com/Aidoku/Aidoku) source for [Rakuyomi](https://github.com/tachibana-shin/rakuyomi) (KOReader manga plugin) that connects to your local [Suwayomi-Server](https://github.com/Suwayomi/Suwayomi-Server).
 
 ```
 KOReader (Rakuyomi) ──► Aidoku Source (.aix) ──► Suwayomi Server ──► Your manga library
@@ -13,90 +13,57 @@ KOReader (Rakuyomi) ──► Aidoku Source (.aix) ──► Suwayomi Server ─
 - Filter by status (Ongoing, Completed, Hiatus, Cancelled)
 - Sort by title, last updated, or date added
 - View recently updated chapters on the home screen
-- Configurable server URL
+- Configurable server URL via source settings
 - Optional Basic Auth support
 
 ## Requirements
 
-- [Suwayomi-Server](https://github.com/Suwayomi/Suwayomi-Server) running and accessible
+- [Suwayomi-Server](https://github.com/Suwayomi/Suwayomi-Server) running and accessible on your network
 - [Rakuyomi](https://github.com/tachibana-shin/rakuyomi) installed on KOReader
-- KOReader with Aidoku SDK 0.7+ support
 
 ## Installation
 
-### From GitHub Release
+### Via GitHub Pages (recommended)
+
+1. In Rakuyomi, go to **Settings → Source Lists → Add**.
+2. Enter the source list URL:
+   ```
+   https://felipe-negri.github.io/suwayomi-rakuyomi-source/index.min.json
+   ```
+3. Find **Suwayomi** in the source list and install it.
+
+### Manual (.aix file)
 
 1. Download `package.aix` from the [latest release](../../releases/latest).
-2. In Rakuyomi, go to **Settings → Sources → Add Source**.
-3. Install `package.aix` from your local file or by URL.
-
-### From Docker Container
-
-If you run the source server via Docker (see below), install the source directly:
-
-1. In Rakuyomi, add source URL: `http://<your-host>:4667/package.aix`
+2. In Rakuyomi, go to **Settings → Sources → Add Source** and select the file.
 
 ## Configuration
 
-After installing, configure the source in **Rakuyomi → Sources → Suwayomi → Settings**:
+After installing, go to **Rakuyomi → Sources → Suwayomi → ⚙️ Settings** and fill in:
 
-| Setting | Description | Default |
+| Setting | Description | Example |
 |---------|-------------|---------|
-| **Suwayomi Server URL** | Full URL to your Suwayomi server | `http://localhost:4567` |
-| **Username** | Basic Auth username (leave blank if not needed) | — |
-| **Password** | Basic Auth password (leave blank if not needed) | — |
+| **Suwayomi Server URL** | Full URL to your Suwayomi server | `http://192.168.1.100:4567` |
+| **Username** | Basic Auth username (optional) | — |
+| **Password** | Basic Auth password (optional) | — |
 
-## Docker Deployment
-
-### Source server only (serves `package.aix`)
-
-```bash
-docker build -t suwayomi-source .
-docker run -p 4667:80 suwayomi-source
-```
-
-The `.aix` file will be available at `http://localhost:4667/package.aix`.
-
-### Full stack (Suwayomi + source server)
-
-```bash
-docker compose up -d
-```
-
-This starts:
-- **Suwayomi Server** at `http://localhost:4567`
-- **Source server** at `http://localhost:4667` (serves `package.aix`)
-
-Install the source in Rakuyomi from `http://<host>:4667/package.aix`, then configure the server URL to point to `http://<host>:4567`.
+> ⚠️ The server URL is **required**. The source won't work until it's configured.
 
 ## Building from Source
-
-### Prerequisites
 
 ```bash
 rustup target add wasm32-unknown-unknown
 cargo install --git https://github.com/Aidoku/aidoku-rs aidoku-cli
-```
-
-### Build
-
-```bash
 aidoku package .
-# Output: package.aix
-```
-
-### Verify
-
-```bash
 aidoku verify package.aix
 ```
 
 ## Architecture
 
-The source communicates with Suwayomi exclusively via:
-- **GraphQL** (`POST /api/graphql`) — for all metadata (manga list, chapters, home)
-- **REST v1** (`/api/v1/manga/{id}/thumbnail`) — for cover images
-- **GraphQL mutation** (`fetchChapterPages`) — to get the correct page URLs
+The source communicates with Suwayomi via:
+- **GraphQL** (`POST /api/graphql`) — manga list, chapters, home screen
+- **REST v1** (`/api/v1/manga/{id}/thumbnail`) — cover images
+- **GraphQL mutation** (`fetchChapterPages`) — page URLs for reading
 
 ## License
 

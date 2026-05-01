@@ -2,6 +2,7 @@
 
 use aidoku::{
     alloc::{String, Vec},
+
     imports::defaults::defaults_get,
     prelude::*,
     Chapter, Filter, FilterValue, Home, HomeComponent, HomeComponentValue, HomeLayout,
@@ -15,7 +16,6 @@ mod helpers;
 
 use api::graphql;
 
-const DEFAULT_SERVER_URL: &str = "http://192.168.50.62:4567";
 const PAGE_SIZE: i32 = 20;
 
 // ── Sort field constants (GraphQL enum values) ────────────────────────────────
@@ -26,10 +26,10 @@ const SORT_IN_LIBRARY_AT: &str = "IN_LIBRARY_AT";
 struct SuwayomiSource;
 
 impl SuwayomiSource {
-    fn server_url(&self) -> String {
+    fn server_url(&self) -> Result<String> {
         defaults_get::<String>("serverUrl")
             .filter(|s| !s.is_empty())
-            .unwrap_or_else(|| String::from(DEFAULT_SERVER_URL))
+            .ok_or(aidoku::AidokuError::Message(aidoku::alloc::String::from("Server URL not configured. Please set the Suwayomi server URL in source settings.")))
     }
 
     fn username(&self) -> Option<String> {
@@ -81,7 +81,7 @@ impl Source for SuwayomiSource {
         page: i32,
         filters: Vec<FilterValue>,
     ) -> Result<MangaPageResult> {
-        let base_url = self.server_url();
+        let base_url = self.server_url()?;
         let username = self.username();
         let password = self.password();
 
@@ -116,11 +116,11 @@ impl Source for SuwayomiSource {
         needs_details: bool,
         needs_chapters: bool,
     ) -> Result<Manga> {
-        let base_url = self.server_url();
+        let base_url = self.server_url()?;
         let username = self.username();
         let password = self.password();
 
-        let manga_id: i32 = manga.key.parse().map_err(|_| error!("Invalid manga key: {}", manga.key))?;
+        let manga_id: i32 = manga.key.parse().map_err(|_| aidoku::AidokuError::Message(aidoku::alloc::String::from("Invalid ID")))?;
 
         if needs_details {
             let data = graphql::fetch_manga(&base_url, &username, &password, manga_id)?;
@@ -143,14 +143,14 @@ impl Source for SuwayomiSource {
     }
 
     fn get_page_list(&self, _manga: Manga, chapter: Chapter) -> Result<Vec<Page>> {
-        let base_url = self.server_url();
+        let base_url = self.server_url()?;
         let username = self.username();
         let password = self.password();
 
         let chapter_id: i32 = chapter
             .key
             .parse()
-            .map_err(|_| error!("Invalid chapter key: {}", chapter.key))?;
+            .map_err(|_| aidoku::AidokuError::Message(aidoku::alloc::String::from("Invalid ID")))?;
 
         let data = graphql::fetch_chapter_pages(&base_url, &username, &password, chapter_id)?;
 
@@ -160,7 +160,7 @@ impl Source for SuwayomiSource {
 
 impl ListingProvider for SuwayomiSource {
     fn get_manga_list(&self, listing: Listing, page: i32) -> Result<MangaPageResult> {
-        let base_url = self.server_url();
+        let base_url = self.server_url()?;
         let username = self.username();
         let password = self.password();
 
@@ -168,7 +168,7 @@ impl ListingProvider for SuwayomiSource {
             // Category listing: "category:42"
             let cat_id: i32 = listing.id["category:".len()..]
                 .parse()
-                .map_err(|_| error!("Invalid category id in listing: {}", listing.id))?;
+                .map_err(|_| aidoku::AidokuError::Message(aidoku::alloc::String::from("Invalid ID")))?;
             let data = graphql::fetch_mangas_by_category(
                 &base_url, &username, &password, cat_id, page,
             )?;
@@ -222,7 +222,7 @@ impl ListingProvider for SuwayomiSource {
 
 impl Home for SuwayomiSource {
     fn get_home(&self) -> Result<HomeLayout> {
-        let base_url = self.server_url();
+        let base_url = self.server_url()?;
         let username = self.username();
         let password = self.password();
 
