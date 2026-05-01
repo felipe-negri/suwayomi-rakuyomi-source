@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - main
-    tags:
-      - "v*.*.*"
   workflow_dispatch:
 
 permissions:
@@ -41,6 +39,19 @@ jobs:
       - name: Install aidoku-cli
         run: cargo install --git https://github.com/Aidoku/aidoku-rs aidoku-cli
 
+      - name: Bump version
+        run: |
+          VERSION=${{ github.run_number }}
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+          # Update res/source.json
+          jq ".info.version = $VERSION" res/source.json > /tmp/source.json && mv /tmp/source.json res/source.json
+
+          # Update index.min.json
+          jq ".[0].version = $VERSION" index.min.json > /tmp/index.json && mv /tmp/index.json index.min.json
+
+          echo "Bumped to version $VERSION"
+
       - name: Build and package
         run: aidoku package .
 
@@ -66,9 +77,10 @@ jobs:
           path: package.aix
 
       - name: Create GitHub Release
-        if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: v${{ env.VERSION }}
+          name: v${{ env.VERSION }}
           files: package.aix
           generate_release_notes: true
 
