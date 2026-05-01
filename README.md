@@ -23,23 +23,36 @@ KOReader (Rakuyomi) ──► Aidoku Source (.aix) ──► Suwayomi Server ─
 
 ## Installation
 
-### Via GitHub Pages (recommended)
+### Step 1 — Add the source list to Rakuyomi's `settings.json`
 
-1. In Rakuyomi, go to **Settings → Source Lists → Add**.
-2. Enter the source list URL:
-   ```
-   https://felipe-negri.github.io/suwayomi-rakuyomi-source/index.min.json
-   ```
-3. Find **Suwayomi** in the source list and install it.
+On your e-reader, open the `rakuyomi/settings.json` file and add this source list URL to the `source_lists` array:
 
-### Manual (.aix file)
+```json
+{
+  "$schema": "https://github.com/tachibana-shin/rakuyomi/releases/latest/download/settings.schema.json",
+  "source_lists": [
+    "https://aidoku-community.github.io/sources/index.min.json",
+    "https://felipe-negri.github.io/suwayomi-rakuyomi-source/index.min.json"
+  ],
+  "languages": ["en"]
+}
+```
 
-1. Download `package.aix` from the [latest release](../../releases/latest).
-2. In Rakuyomi, go to **Settings → Sources → Add Source** and select the file.
+> The file is located in the `rakuyomi/` folder inside your KOReader directory. Common paths:
+> - **Kobo:** `.adds/koreader/rakuyomi/settings.json`
+> - **Kindle:** `koreader/rakuyomi/settings.json`
+> - **Cervantes:** `/mnt/private/koreader/rakuyomi/settings.json`
+> - **PocketBook:** `applications/koreader/rakuyomi/settings.json`
 
-## Configuration
+### Step 2 — Install the source
 
-After installing, go to **Rakuyomi → Sources → Suwayomi → ⚙️ Settings** and fill in:
+1. In Rakuyomi, open the menu (☰) and go to **Manage Sources**.
+2. Tap ➕ to browse available sources.
+3. Find **Suwayomi** and tap to install it.
+
+### Step 3 — Configure the server URL
+
+After installing, tap ⚙️ next to the Suwayomi source and fill in:
 
 | Setting | Description | Example |
 |---------|-------------|---------|
@@ -47,7 +60,11 @@ After installing, go to **Rakuyomi → Sources → Suwayomi → ⚙️ Settings*
 | **Username** | Basic Auth username (optional) | — |
 | **Password** | Basic Auth password (optional) | — |
 
-> ⚠️ The server URL is **required**. The source won't work until it's configured.
+> ⚠️ The **Server URL is required**. The source won't work until it's configured.
+
+### Manual install (.aix file)
+
+Alternatively, download `package.aix` from the [latest release](../../releases/latest) and install it manually via **Manage Sources → ➕ → local file**.
 
 ## Building from Source
 
