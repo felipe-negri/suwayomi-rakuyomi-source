@@ -129,6 +129,11 @@ fn extract_chapter_title(name: &str) -> Option<String> {
             return Some(String::from(title));
         }
     }
-    // If the name is just a number/volume marker with no additional text, return None
-    None
+    // Fall back to the full name if no separator found
+    let trimmed = name.trim();
+    if trimmed.is_empty() {
+        None
+    } else {
+        Some(String::from(trimmed))
+    }
 }
