@@ -37,7 +37,7 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Install aidoku-cli
-        run: cargo install --git https://github.com/Aidoku/aidoku-rs aidoku-cli
+        run: cargo install --git https://github.com/Aidoku/aidoku-rs --rev 401296e54610f938beac4102b564ae11db4b3aed aidoku-cli
 
       - name: Bump version
         run: |
