@@ -100,6 +100,19 @@ pub struct FetchChapterPagesPayload {
     pub pages: Vec<String>,
 }
 
+// ── fetchMangaChapters mutation ───────────────────────────────────────────────
+
+#[derive(Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct FetchMangaChaptersData {
+    pub fetch_manga_chapters: FetchMangaChaptersPayload,
+}
+
+#[derive(Deserialize)]
+pub struct FetchMangaChaptersPayload {
+    pub chapters: Vec<ChapterNode>,
+}
+
 // ── Recently updated (chapters with manga info) ───────────────────────────────
 
 #[derive(Deserialize)]

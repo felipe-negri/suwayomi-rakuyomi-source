@@ -17,6 +17,7 @@ mod helpers;
 use api::graphql;
 
 const PAGE_SIZE: i32 = 20;
+const LIBRARY_PAGE_SIZE: i32 = 5000;
 
 // ── Sort field constants (GraphQL enum values) ────────────────────────────────
 const SORT_TITLE: &str = "TITLE";
@@ -105,7 +106,14 @@ impl Source for SuwayomiSource {
             .map(|n| helpers::manga_from_node(n, &base_url))
             .collect();
 
-        let has_next_page = (page * PAGE_SIZE) < data.mangas.total_count;
+        // For a blank search (no query), fetch_mangas uses LIBRARY_PAGE_SIZE
+        // so the whole library fits in one request.
+        let batch = if query.as_deref().map(|q| q.is_empty()).unwrap_or(true) {
+            LIBRARY_PAGE_SIZE
+        } else {
+            PAGE_SIZE
+        };
+        let has_next_page = (page * batch) < data.mangas.total_count;
 
         Ok(MangaPageResult { entries, has_next_page })
     }
@@ -129,10 +137,13 @@ impl Source for SuwayomiSource {
         }
 
         if needs_chapters {
-            let data = graphql::fetch_chapters(&base_url, &username, &password, manga_id)?;
+            // Use the fetchMangaChapters mutation so Suwayomi syncs chapters
+            // from the upstream source on-demand. This handles the case where
+            // a manga was added to the library but chapters were never fetched.
+            let data = graphql::fetch_manga_chapters(&base_url, &username, &password, manga_id)?;
             let chapters: Vec<Chapter> = data
+                .fetch_manga_chapters
                 .chapters
-                .nodes
                 .iter()
                 .map(helpers::chapter_from_node)
                 .collect();
@@ -178,7 +189,7 @@ impl ListingProvider for SuwayomiSource {
                 .iter()
                 .map(|n| helpers::manga_from_node(n, &base_url))
                 .collect();
-            let has_next_page = (page * PAGE_SIZE) < data.mangas.total_count;
+            let has_next_page = (page * LIBRARY_PAGE_SIZE) < data.mangas.total_count;
             return Ok(MangaPageResult { entries, has_next_page });
         }
 
@@ -200,7 +211,7 @@ impl ListingProvider for SuwayomiSource {
                     .iter()
                     .map(|n| helpers::manga_from_node(n, &base_url))
                     .collect();
-                let has_next_page = (page * PAGE_SIZE) < data.mangas.total_count;
+                let has_next_page = (page * LIBRARY_PAGE_SIZE) < data.mangas.total_count;
                 Ok(MangaPageResult { entries, has_next_page })
             }
             "recent" => {

@@ -8,6 +8,9 @@ use serde::Serialize;
 use super::models::*;
 
 const PAGE_SIZE: i32 = 20;
+/// Large batch size used for library/category listings so the entire
+/// library loads in a single request (no "page 2" appearing in Aidoku).
+const LIBRARY_PAGE_SIZE: i32 = 5000;
 
 /// Build the Authorization header value from optional credentials.
 fn auth_header(username: &Option<String>, password: &Option<String>) -> Option<String> {
@@ -99,7 +102,14 @@ pub fn fetch_mangas(
     sort_asc: bool,
     page: i32,
 ) -> Result<MangasData> {
-    let offset = (page - 1) * PAGE_SIZE;
+    // Use a large batch for library listings (no title query) so the full
+    // library is returned in one request. Use normal PAGE_SIZE for searches.
+    let batch = if title_query.map(|q| q.is_empty()).unwrap_or(true) {
+        LIBRARY_PAGE_SIZE
+    } else {
+        PAGE_SIZE
+    };
+    let offset = (page - 1) * batch;
     let order_dir = if sort_asc { "ASC" } else { "DESC" };
 
     // Build optional filter clauses — use real double-quotes; serde_json will escape them
@@ -125,7 +135,7 @@ pub fn fetch_mangas(
     {title_clause}
     orderBy: {sort_field}
     orderByType: {order_dir}
-    first: {PAGE_SIZE}
+    first: {batch}
     offset: {offset}
   ) {{
     totalCount
@@ -174,6 +184,30 @@ pub fn fetch_chapters(
     orderByType: ASC
   ) {{
     nodes {{
+      id name chapterNumber uploadDate scanlator
+      realUrl sourceOrder
+    }}
+  }}
+}}"#
+    ));
+
+    graphql_query(base_url, &query, username, password)
+}
+
+/// Fetch + sync chapters from the source for a manga via mutation.
+/// This is the correct way to load chapters for a manga that hasn't been
+/// synced yet — it triggers Suwayomi to pull chapters from the upstream
+/// source and returns the full updated list.
+pub fn fetch_manga_chapters(
+    base_url: &str,
+    username: &Option<String>,
+    password: &Option<String>,
+    manga_id: i32,
+) -> Result<FetchMangaChaptersData> {
+    let query = build_query(&format!(
+        r#"mutation {{
+  fetchMangaChapters(input: {{id: {manga_id}}}) {{
+    chapters {{
       id name chapterNumber uploadDate scanlator
       realUrl sourceOrder
     }}
@@ -258,7 +292,7 @@ pub fn fetch_mangas_by_category(
     category_id: i32,
     page: i32,
 ) -> Result<MangasData> {
-    let offset = (page - 1) * PAGE_SIZE;
+    let offset = (page - 1) * LIBRARY_PAGE_SIZE;
 
     let query = build_query(&format!(
         r#"{{
@@ -267,7 +301,7 @@ pub fn fetch_mangas_by_category(
     condition: {{inLibrary: true}}
     orderBy: TITLE
     orderByType: ASC
-    first: {PAGE_SIZE}
+    first: {LIBRARY_PAGE_SIZE}
     offset: {offset}
   ) {{
     totalCount
