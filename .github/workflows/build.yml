@@ -34,7 +34,7 @@ jobs:
             ~/.cargo/registry
             ~/.cargo/git
             target/
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}-${{ hashFiles('.github/workflows/build.yml') }}
 
       - name: Install aidoku-cli
         run: cargo install --git https://github.com/Aidoku/aidoku-rs --rev 401296e54610f938beac4102b564ae11db4b3aed aidoku-cli
