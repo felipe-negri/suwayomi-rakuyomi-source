@@ -137,16 +137,18 @@ impl Source for SuwayomiSource {
         }
 
         if needs_chapters {
-            // Use the fetchMangaChapters mutation so Suwayomi syncs chapters
-            // from the upstream source on-demand. This handles the case where
-            // a manga was added to the library but chapters were never fetched.
-            let data = graphql::fetch_manga_chapters(&base_url, &username, &password, manga_id)?;
-            let chapters: Vec<Chapter> = data
-                .fetch_manga_chapters
-                .chapters
-                .iter()
-                .map(helpers::chapter_from_node)
-                .collect();
+            // First try the fast query (chapters already in Suwayomi's DB).
+            // If empty, fall back to the mutation that syncs from the upstream
+            // source on-demand (handles manga added but never synced).
+            let chapters: Vec<Chapter> = {
+                let existing = graphql::fetch_chapters(&base_url, &username, &password, manga_id)?;
+                if !existing.chapters.nodes.is_empty() {
+                    existing.chapters.nodes.iter().map(helpers::chapter_from_node).collect()
+                } else {
+                    let synced = graphql::fetch_manga_chapters(&base_url, &username, &password, manga_id)?;
+                    synced.fetch_manga_chapters.chapters.iter().map(helpers::chapter_from_node).collect()
+                }
+            };
             manga.chapters = Some(chapters);
         }
 
